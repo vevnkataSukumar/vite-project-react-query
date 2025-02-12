@@ -10,9 +10,9 @@ function Home() {
     data: [],
   });
 
-  useEffect(() => {
-    fetchPosts().then(res => console.log(res));
-  }, []);
+  // useEffect(() => {
+  //   fetchPosts().then(res => console.log(res));
+  // }, []);
 
   return (
       <div>

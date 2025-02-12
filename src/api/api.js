@@ -1,9 +1,7 @@
+const APP_URL = 'http://localhost:3000';
 const fetchPosts = async (page) => {
-  const response = await fetch(
-    `http://localhost:3000/posts?_sort=-id&${
-      page ? `_page=${page}&_per_page=5` : ""
-    }`
-  );
+  const api = page ? `${APP_URL}/posts?_sort=-id&_page=${page}&_per_page=5`: `${APP_URL}/posts`;
+  const response = await fetch(api);
   if (!response.ok) {
     throw new Error(`Failed to fetch posts. Status: ${response.status}`);
   }
@@ -13,13 +11,13 @@ const fetchPosts = async (page) => {
 };
 
 const fetchTags = async () => {
-  const response = await fetch("http://localhost:3000/tags");
+  const response = await fetch(`${APP_URL}/tags`);
   const tagsData = await response.json();
   return tagsData;
 };
 
 const addPost = async (post) => {
-  const response = await fetch("http://localhost:3000/posts", {
+  const response = await fetch(`${APP_URL}/posts`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
