@@ -65,4 +65,23 @@ body {
     display: flex;
     gap: 10px;
     align-items: center;
+}
+
+.products {
+    display: flex;
+    flex-direction: row;
+}
+
+.list {
+    background-color: bisque;
+}
+
+.row {
+    /* padding: 10px; */
+    border-bottom: 1px solid #ddd;
+    font-size: 16px;
+  }
+  
+  .row:nth-child(even) {
+    background-color: #f0f0f0;
   }
