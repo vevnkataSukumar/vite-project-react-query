@@ -2,6 +2,7 @@ import React from 'react'
 import Autocomplete from '../components/autocomplete';
 // import { useMutation } from '@tanstack/react-query';
 import { fetchPosts } from '../api/api';
+import Modal from '../components/modal';
 
 const staticPostData = [
     {
@@ -19,7 +20,7 @@ const staticPostData = [
 ];
 
 function PostSuggestions() {
-    // const [postsData, setPostsData] = React.useState(null)
+    const [isOpen, setIsOpen] = React.useState(false)
     // const {
     //     mutate,
     //     data: postsData,
@@ -49,6 +50,10 @@ function PostSuggestions() {
             customStyles={{}}
             staticData={null}
         />
+        <button onClick={() => setIsOpen(true)}>Pop me up!</button>
+        {
+            isOpen && <Modal onClose={() => setIsOpen(false)}>This is a portal modal!</Modal>
+        }
     </div>
   )
 }
