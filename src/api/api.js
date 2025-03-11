@@ -1,6 +1,6 @@
 const APP_URL = 'http://localhost:3000';
 const fetchPosts = async (page) => {
-  const api = page ? `${APP_URL}/posts?_sort=-id&_page=${page}&_per_page=5`: `${APP_URL}/posts`;
+  const api = page ? `${APP_URL}/posts?_sort=-id&_page=${page}&_per_page=15`: `${APP_URL}/posts`;
   const response = await fetch(api);
   if (!response.ok) {
     throw new Error(`Failed to fetch posts. Status: ${response.status}`);

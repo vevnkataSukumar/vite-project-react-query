@@ -1,51 +1,39 @@
-// import React from 'react';
 import { addPost, fetchPosts, fetchTags } from "../api/api";
-import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryClient } from "../query";
 import { useState } from "react";
+import {
+  Button,
+  Box,
+  Typography,
+  Paper,
+  Chip,
+} from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
+import AddPost from "./addPost";
 
 const PostsList = () => {
-  const [page, setpage] = useState(1);
-  const {
-    data: postData,
-    isError,
-    error,
-    isLoading,
-  } = useQuery({
+  const [page, setPage] = useState(1);
+  const [open, setOpen] = useState(false);
+  const { data: postData, isLoading, isError, error } = useQuery({
     queryKey: ["posts", { page }],
     queryFn: () => fetchPosts(page),
-    staleTime: 5 * 60 * 1000,
-    // placeholderData: keepPreviousData,
-    // gcTime: 0,
-    // refetchInterval: 5000,
   });
 
-  const {
-    data: tagsData,
-    // isError: isTagError,
-    // isPending: isTagPending,
-    // error: tagError,
-  } = useQuery({
+  const { data: tagsData } = useQuery({
     queryKey: ["tags"],
     queryFn: fetchTags,
     staleTime: Infinity,
   });
 
-  const {
-    mutate,
-    isError: isPostError,
-    isPending,
-    error: postError,
-    reset,
-  } = useMutation({
-    mutationFn: addPost,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["posts"],
-        exact: true,
-      });
-    },
-  });
+  const { mutate, isError: isPostError, isPending, error: postError, reset } =
+    useMutation({
+      mutationFn: addPost,
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["posts"], refetchType: "all" });
+        queryClient.refetchQueries({ queryKey: ["posts"] });
+      },
+    });
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -55,66 +43,64 @@ const PostsList = () => {
       (key) => formData.get(key) === "on"
     );
     if (!title || !tags) return;
-    console.log(title, tags);
+    setOpen(false);
     mutate({
       title,
       tags,
-      id: postData?.data?.length + 1,
+      id: postData?.items + 1,
     });
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
-    <div className="container">
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Enter your post.."
-          className="postbox"
-          name="title"
-        />
-        <div className="tags">
-          {tagsData &&
-            tagsData?.map((tag) => {
-              return (
-                <div key={tag}>
-                  <input name={tag} id={tag} type="checkbox" />
-                  <label htmlFor={tag}>{tag}</label>
-                </div>
-              );
-            })}
-        </div>
-        <button>Post</button>
-      </form>
-      {isLoading && isPending && <p>Loading...</p>}
-      {isError && <p>{error?.message}</p>}
-      {isPostError && <p onClick={() => reset()}>{postError?.message}</p>}
-      <div className="pages">
-        <button
-          disabled={!postData?.prev}
-          onClick={() => setpage((prevPage) => Math.max(prevPage - 1, 0))}
-        >
-          Previous page
-        </button>
-        <span>{page}</span>
-        <button
-          disabled={!postData?.next}
-          onClick={() => setpage((prevPage) => prevPage + 1)}
-        >
-          Next Page
-        </button>
-      </div>
-      {postData &&
-        postData?.data?.map((post) => {
-          return (
-            <div className="post" key={post.id}>
-              <div>{post?.title}</div>
-              {post?.tags.map((tag) => (
-                <span key={tag}>{tag}</span>
+    <>
+      <Button
+        variant="outlined"
+        onClick={() => setOpen(!open)}
+        sx={{}}
+        startIcon={<AddIcon />}
+      >
+        Add Post
+      </Button>
+      <Paper elevation={3} sx={{ p: 3, maxWidth: 600, mx: "auto", mt: 5 }}>
+        {isLoading && isPending && <Typography>Loading...</Typography>}
+        {isError && <Typography color="error">{error?.message}</Typography>}
+        {isPostError && (
+          <Typography color="error" onClick={() => reset()}>{postError?.message}</Typography>
+        )}
+        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}>
+          <Button
+            variant="outlined"
+            disabled={!postData?.prev}
+            onClick={() => setPage((prevPage) => Math.max(prevPage - 1, 1))}
+          >
+            Previous
+          </Button>
+          <Typography>{page}</Typography>
+          <Button
+            variant="outlined"
+            disabled={!postData?.next}
+            onClick={() => setPage((prevPage) => prevPage + 1)}
+          >
+            Next
+          </Button>
+        </Box>
+        {postData?.data?.map((post) => (
+          <Paper key={post.id} sx={{ p: 2, mt: 2 }}>
+            <Typography variant="h6">{post.title}</Typography>
+            <Box >
+              {post.tags.map((tag, index) => (
+                <Chip key={`${tag}-${index}`} label={tag} color="primary" variant="outlined" sx={{ margin: "8px", marginLeft: '0px' }} />
               ))}
-            </div>
-          );
-        })}
-    </div>
+            </Box>
+          </Paper>
+        ))}
+        <AddPost open={open} onClose={handleClose} handleForm={handleSubmit} tagsData={tagsData}/>
+      </Paper>
+    </>
   );
 };
 

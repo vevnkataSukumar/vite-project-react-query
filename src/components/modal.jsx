@@ -1,17 +1,4 @@
-import React from "react";
 import ReactDOM from "react-dom";
-
-const Modal2 = ({ children, onClose }) => {
-  return ReactDOM.createPortal(
-    <div style={styles.overlay}>
-      <div style={styles.modal}>
-        {children}
-        <button onClick={onClose} style={styles.button}>Close</button>
-      </div>
-    </div>,
-    document.getElementById("modal-root") // 👈 Rendering outside the normal React tree
-  );
-};
 
 const Modal = ({children, onClose }) => {
     return ReactDOM.createPortal(
@@ -48,7 +35,8 @@ const styles = {
     width: "200px",
     padding: "20px",
     borderRadius: "8px",
-    textAlign: "center", 
+    textAlign: "center",
+    flexDirection: 'column' 
   },
   button: {
     marginTop: "10px",

@@ -29,7 +29,8 @@ body {
     font-size: 18px;
     border-radius: 5px;
     border: none;
-    border-bottom: 2px solid grey;
+    border: 2px solid grey;
+    margin: 20px 0px;
 }
   
 .tags {
