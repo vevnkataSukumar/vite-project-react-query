@@ -3,6 +3,7 @@ import globals from 'globals'
 import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
+import babelParser from '@babel/eslint-parser';
 
 export default [
   { ignores: ['dist'] },
@@ -11,10 +12,15 @@ export default [
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
+      parser: babelParser,
       parserOptions: {
         ecmaVersion: 'latest',
         ecmaFeatures: { jsx: true },
         sourceType: 'module',
+        requireConfigFile: false,
+        babelOptions: {
+          presets: ["@babel/preset-react"],
+        },
       },
     },
     settings: { react: { version: '18.3' } },

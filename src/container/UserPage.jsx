@@ -1,4 +1,5 @@
 import {Suspense} from 'react';
+import AuthHoc from '../HOCs/AuthHoc';
 
 // async function fetchUser() {
 //     return fetch("https://jsonplaceholder.typicode.com/users/1")
@@ -23,4 +24,4 @@ function UserPage() {
   )
 }
 
-export default UserPage
+export default AuthHoc(UserPage);

@@ -1,3 +1,4 @@
+import React from 'react';
 import {
     Box,
     TextField,
@@ -19,7 +20,7 @@ function AddPost(props) {
         >
             <Box sx={{ ...style }}>
                 <Typography sx={{ textAlign: 'center' }} variant="h5" gutterBottom>Upload a Post</Typography>
-                <form onSubmit={props?.handleForm}>
+                <form data-testid="post-form" onSubmit={props?.handleForm}>
                     <TextField
                         fullWidth
                         label="Enter your post"

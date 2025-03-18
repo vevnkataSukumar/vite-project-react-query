@@ -86,3 +86,9 @@ body {
   .row:nth-child(even) {
     background-color: #f0f0f0;
   }
+
+  .register {
+    display: flex;
+    flex-direction: column;
+    background-color: aquamarine;
+  }

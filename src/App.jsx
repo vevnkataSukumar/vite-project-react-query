@@ -1,8 +1,11 @@
+import { ThemeContext, ThemeContextProvider } from "./CoderByte/context-api";
 import RouteComponent from "./routes"
 
 function App() {
   return (
-      <RouteComponent />
+      <ThemeContextProvider>
+        <RouteComponent />
+      </ThemeContextProvider>
   )
 }
 

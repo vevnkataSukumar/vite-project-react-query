@@ -57,15 +57,16 @@ const PostsList = () => {
 
   return (
     <>
-      <Button
-        variant="outlined"
-        onClick={() => setOpen(!open)}
-        sx={{}}
-        startIcon={<AddIcon />}
-      >
-        Add Post
-      </Button>
-      <Paper elevation={3} sx={{ p: 3, maxWidth: 600, mx: "auto", mt: 5 }}>
+      <Box sx={{display: "flex", justifyContent: "flex-end", p: 3}}>
+        <Button
+          variant="contained"
+          onClick={() => setOpen(!open)}
+          startIcon={<AddIcon />}
+        >
+          Add Post
+        </Button>
+      </Box>
+      <Paper elevation={3} sx={{ p: 3, maxWidth: 600, mx: "auto", mt: 3 }}>
         {isLoading && isPending && <Typography>Loading...</Typography>}
         {isError && <Typography color="error">{error?.message}</Typography>}
         {isPostError && (
